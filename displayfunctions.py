@@ -71,7 +71,7 @@ def showframe(ax=[],color=snscolors[1]):  # the 'frame' was calculated and saved
     [ax.plot([bd.xpixels,2*bd.xpixels],[d,d],c=color,zorder=10) for d in [bd.div1_r,bd.div2_r]]
     return ax
     
-def plotbee_xy(x,y,camera,ax=[],color='k',s=10,alpha=0.7,joined=True,maxxydiff=80):
+def plotbee_xy(x,y,camera,ax=[],color='k',s=10,alpha=0.7,joined=True,maxxydiff=80,rasterized=False):
     if ax==[]:
         f, ax = createnewimage()     
     if len(x)>0:
@@ -93,10 +93,10 @@ def plotbee_xy(x,y,camera,ax=[],color='k',s=10,alpha=0.7,joined=True,maxxydiff=8
             ytp = np.split(y/conv_factor, splitcond)
             for j in range(len(xtp)):
                 if len(xtp[j])>1:
-                    ax.plot(xtp[j],ytp[j],color=color,alpha=alpha,linewidth=s/10) 
+                    ax.plot(xtp[j],ytp[j],color=color,alpha=alpha,linewidth=s/10,rasterized=rasterized) 
         else:
             # plot as points (easier)
-            ax.scatter(x_adjusted,y/conv_factor,color=color,s=s,alpha=alpha)
+            ax.scatter(x_adjusted,y/conv_factor,color=color,s=s,alpha=alpha,rasterized=rasterized)
     return ax
 
 

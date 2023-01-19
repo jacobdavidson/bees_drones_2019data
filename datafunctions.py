@@ -50,10 +50,10 @@ def flat_to_hist(flatrow):
     numhistbins = bd.numxbins*bd.numybins
     return np.reshape(np.array(flatrow)[-numhistbins:],(bd.numxbins,bd.numybins))
 
-##########################################################################################################################################
+###########################################################################################################################
 ### SUBSTRATE AND COMB RELATED FUNCTIONS
 # These are used to create a 'comb' class, that reads in image(s) (pixels) - a single day if measurement occurred on that day, or two days if the day is between measurements, converts to substrate map which has integer values based on  assignments, and functions to use this (getsubstrate, getsubstrate_simple
-##########################################################################################################################################    
+###########################################################################################################################   
 
 def get_comb_images(comb_contents_dir,meas_num):
     if bd.year==2018:
@@ -187,10 +187,10 @@ def getsubstrate_simple(comb,dancecomb,cameranums,c1,c2):
     
 
     
-##########################################################################################################################################
+###########################################################################################################################
 #### DATABASE and RAW DATA RELATED FUNCTIONS
 # Function to query the database and return a pandas df, then to sort, delete duplicates, and return np arrays
-##########################################################################################################################################    
+###########################################################################################################################
 
 # Note that time input here is in time zone assumed by the database, which is UTC time.  Konstanz is UTC+2 in the summer (e.g. 10am Konstanz is 8am UTC)
 # This function queries the database and returns a pandas df
@@ -253,51 +253,11 @@ def df_to_coords(df,conf_threshold=0.8):  # using a higher confidence threshold 
     else:
         return [], [], [], [], [], [], [], []
 
-##########################################################################################################################################
-#### MLS DATABASE FUNCTIONS SPECIFIC TO 2018
-##########################################################################################################################################    
-
-# MLS ADDED THIS:  
-# 21 Jan 2022. JD: This section is outdated, not using
-def dbquery_untagged(day_input,starttime = "00:00:00.000000+00:00",endtime = "23:59:59.999999+00:00",limit=44236800):  # this limit is all bees, tracked for one hour    
-    day =  pd.Timestamp(day_input,freq='D')
-    if starttime<endtime:
-        daystringstart = day.strftime('%Y-%m-%d')
-        daystringend = daystringstart
-    else:
-        daystringstart = day.strftime('%Y-%m-%d')
-        day2 = day + day.freq  #  this is what the 'proper' way to do it is, because freq = 1 Day
-        daystringend = day2.strftime('%Y-%m-%d')
-
-    conn = psycopg2.connect("dbname='beesbook' user='msmith' host='localhost' password='!msmith2018' port='5433'")
-    df = pd.read_sql("SELECT * FROM bb_unmarked_2018_konstanz WHERE " 
-                 +" timestamp BETWEEN '" +daystringstart+" "+starttime+ "' AND '"+daystringend+" "+endtime+ "' "
-                 +"ORDER BY timestamp " + 
-                "LIMIT "+str(limit), 
-                 conn, coerce_float=False) 
-    return df  
-
-
-# MLS ADDED THIS AS WELL:  
-def df_to_coords_untagged(df): 
-    # sort by timestamp
-    df.sort_values(['timestamp'], ascending=[True], inplace=True)
-    # No need to drop duplicates
-    if len(df)>0:
-        times = df['timestamp']
-        camera = np.array(df['cam_id'])   
-        x = np.array(df['x_pos'])
-        y = np.array(df['y_pos'])
-        return camera, x, y, times
-    else:
-        return [], [], [], []
-
-
     
-##########################################################################################################################################
+###########################################################################################################################
 ## CALCULATIONS
 # multiple calculations that are useful for data reduction
-##########################################################################################################################################
+###########################################################################################################################
     
 def fixanglerange(angles):
     return np.arctan2(np.sin(angles),np.cos(angles))

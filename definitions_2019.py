@@ -6,12 +6,9 @@ from matplotlib import colors
 import seaborn as sns
 
 
-querydata = "dbname='beesbook' user='reader' host='localhost' password='reader' port='5435'"
-databasename = 'bb_detections_2019_konstanz_complete'
-
 year = 2019
 startday = pd.Timestamp(year,6,5)  # actual, for 2019:   5 June 2019  (cameras turned on)
-endday = pd.Timestamp(year,9,28)    # actual, for 2019:   28 September... but should be... 04 Oct (need to include Morgane recordings)
+endday = pd.Timestamp(year,9,27)    # actual, for 2019:  Last full day with data is 27 Sept, but cameras off on 28 September... but could be 04 Oct (if include Morgane recordings).  
 alldaytimestamps = pd.date_range(start=startday,end=endday,freq='D')
 numdays = len(alldaytimestamps)  # total number of days is: 
 numbees = 4096  #  I think 4096 is the total number.  This is the total number of barcodes, NOT the total number of bees actually tracked
